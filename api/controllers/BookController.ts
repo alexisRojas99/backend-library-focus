@@ -18,8 +18,8 @@ export default class BookController {
   public async getBookById(req: Request, res: Response): Promise<object> {
     const { id } = req.params;
 
-    const response = await this.bookServices.getBookById(Number(id));
+    const response = await this.bookServices.getBookById(id);
 
-    return res.status(HttpCode.HTTP_OK).json({ message: 'getBookById' });
+    return res.status(HttpCode.HTTP_OK).json(response);
   }
 }

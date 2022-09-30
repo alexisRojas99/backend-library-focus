@@ -14,5 +14,5 @@ export interface RequestQuery {
 export interface BookServicesInterface {
   // index(index: RequestQuery): Promise<object>;
   index(): Promise<object>;
-  getBookById(id: number): Promise<object>;
+  getBookById(id: string): Promise<object>;
 }
