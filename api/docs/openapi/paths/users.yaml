@@ -1,0 +1,278 @@
+/api/v1/users:
+  post:
+    tags:
+      - users
+    operationId: postUsuario
+    requestBody:
+      description: Objeto Usuario 
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              password: 
+                type: string
+              roles:
+                type: array
+                items:
+                  type: integer
+      required: true
+    responses:
+      201:
+        description: Usuario creado
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                username:
+                  type: string
+                roles:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+      400:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Error"
+      401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Error"
+      403:
+        description: Not Found
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Error"
+      500:
+        description: Internal Server Error
+        content:
+  x-codegen-request-body-name: body
+
+  get:
+    parameters:
+    - in: query
+      name: username
+      required: false
+      type: string
+      description: Parametro para filtrar por username
+    - in: query
+      name: is_suspended
+      required: false
+      type: boolean
+      description: Parametro para filtrar por usuario suspendido
+    - in: query
+      name: page
+      required: false
+      description: Parametro para habilidar la paginacion de los resultados e indicar el numero de pagina actual
+      schema:
+        type: integer
+        default: 1
+    - in: query
+      name: per_page
+      required: false
+      type: integer
+      description: Parametro para indicar la cantidad de resultados por pagina
+      default: 10
+    tags:
+      - users
+    operationId: getUsuarios
+    produces:
+      - application/json
+    responses:
+      200:
+        description: Usuarios
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                total_rows:
+                  type: integer
+                  example: 1
+                page:
+                  type: integer
+                  example: 1
+                per_page:
+                  type: integer
+                  example: 10
+                body:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      username:
+                        type: string
+                      is_suspended:
+                        type: boolean
+                        example: false
+                      last_login:
+                        type: string
+                        format: date-time
+                        example: '2020-01-01T00:00:00.000Z'
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2020-01-01T00:00:00.000Z'
+                      roles:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 1
+                            nombre:
+                              type: string
+                            descripcion:
+                              type: string
+      401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Error"
+      403:
+        description: Not Found
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Error"
+      500:
+        description: Internal Server Error
+        content:
+  area: development
+
+/api/v1/users/{id}:
+  get:
+    tags:
+      - users
+    operationId: getUserById
+    parameters:
+      - in: path
+        name: id
+        required: true
+        type: integer
+        description: User ID
+    produces:
+      - application/json
+    responses:
+      200:
+        description: Usuarios
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                username:
+                  type: string
+                is_suspended:
+                  type: boolean
+                  example: false
+                last_login:
+                  type: string
+                  format: date-time
+                  example: '2020-01-01T00:00:00.000Z'
+                created_at:
+                  type: string
+                  format: date-time
+                  example: '2020-01-01T00:00:00.000Z'
+                Roles:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      name:
+                        type: string
+                      description:
+                        type: string
+                      
+      401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Error"
+      403:
+        description: Not Found
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Error"
+      500:
+        description: Internal Server Error
+        content:
+  area: development
+
+/api/v1/login:
+  post:
+    tags:
+      - auth
+    operationId: loginUsuario
+    requestBody:
+      description: Objeto Login Usuario 
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              password: 
+                type: string
+      required: true
+    responses:
+      201:
+        description: Inicio sesión usuario
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+      400:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Error"
+      401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Error"
+      403:
+        description: Not Found
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Error"
+      500:
+        description: Internal Server Error
+        content:
+  x-codegen-request-body-name: body
+
+  area: api

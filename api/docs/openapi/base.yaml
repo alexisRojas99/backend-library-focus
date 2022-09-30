@@ -1,0 +1,16 @@
+openapi: 3.0.1
+info:
+  title: Documentación de la API 
+  description: 'API - Development'
+paths:
+  $include: "paths/paths.yaml"
+components:
+  schemas:
+    $include: "schemas/schemas.yaml"
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
