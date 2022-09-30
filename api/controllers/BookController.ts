@@ -13,7 +13,10 @@ export default class BookController {
     } = req.query;
 
     const response = await this.bookServices.index({
-      isbn, title, genre, author,
+      isbn,
+      title,
+      genre,
+      author,
     });
 
     return res.status(HttpCode.HTTP_OK).json(response);
@@ -31,5 +34,17 @@ export default class BookController {
     const response = await this.bookServices.getHistory();
 
     return res.status(HttpCode.HTTP_OK).json(response);
+  }
+
+  public async createBook(req: Request, res: Response): Promise<object> {
+    const {
+      isbn, title, image, author, published_year: publishedYear, genre, stock,
+    } = req.body;
+
+    const response = await this.bookServices.createBook({
+      isbn, title, image, author, published_year: publishedYear, genre, stock,
+    });
+
+    return res.status(HttpCode.HTTP_CREATED).json(response);
   }
 }

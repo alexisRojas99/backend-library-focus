@@ -3,7 +3,7 @@ import UserController from '../../api/controllers/UserController';
 import Call from '../../api/utils/Call';
 import UserServices from '../../api/services/UserServices';
 import validate from '../../api/middlewares/validate';
-import { createUserSchema } from '../../api/validations/UsuarioSchema';
+import { createUserSchema } from '../../api/validations/UsersSchema';
 // import validateRole from '../../api/utils/validate-rols';
 
 const router = Router();

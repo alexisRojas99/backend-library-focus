@@ -3,7 +3,7 @@ import Call from '../api/utils/Call';
 import MainControllers from '../api/controllers/mainControllers';
 import validate from '../api/middlewares/validate';
 import auth from '../api/middlewares/validate-jwt';
-import { loginSchema } from '../api/validations/UsuarioSchema';
+import { loginSchema } from '../api/validations/UsersSchema';
 import routesUsers from './resource/users';
 import MainServices from '../api/services/auth/MainServices';
 import routerBooks from './resource/books';

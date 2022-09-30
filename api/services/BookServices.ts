@@ -1,7 +1,7 @@
 import { Op } from 'sequelize';
 import BadRequestException from '../../handlers/BadRequestException';
 import { Books, BooksRecords, Users } from '../models/index';
-import { BookServicesInterface, RequestQuery } from './interfaces/BookServicesInterfaces';
+import { BookServicesInterface, RequestQuery, RequestQueryCreateBook } from './interfaces/BookServicesInterfaces';
 
 export default class BookServices implements BookServicesInterface {
   public async index(queryFilters: RequestQuery): Promise<object> {
@@ -59,5 +59,26 @@ export default class BookServices implements BookServicesInterface {
     });
 
     return getHistory || {};
+  }
+
+  public async createBook(book: RequestQueryCreateBook): Promise<object> {
+    const checkBook = await Books.findOne({
+      where: { isbn: book.isbn },
+    });
+
+    if (checkBook) throw new BadRequestException('Book already exists');
+
+    const data = {
+      isbn: book.isbn,
+      title: book.title.toUpperCase(),
+      image: book.image,
+      author: book.author.toUpperCase(),
+      published_year: book.published_year,
+      genre: book.genre.toUpperCase(),
+      stock: book.stock,
+    };
+    const createBook = await Books.create(data);
+
+    return createBook || {};
   }
 }
