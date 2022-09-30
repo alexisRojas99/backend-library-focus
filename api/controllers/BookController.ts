@@ -8,9 +8,13 @@ export default class BookController {
   constructor(private readonly bookServices: BookServicesInterface) {}
 
   public async index(req: Request<RequestParams, ResponseBody, RequestBody, RequestQuery>, res: Response): Promise<object> {
-    // const { page, per_page: perPage, username, is_suspended: isSuspended } = req.query;
+    const {
+      isbn, title, genre, author,
+    } = req.query;
 
-    const response = await this.bookServices.index();
+    const response = await this.bookServices.index({
+      isbn, title, genre, author,
+    });
 
     return res.status(HttpCode.HTTP_OK).json(response);
   }

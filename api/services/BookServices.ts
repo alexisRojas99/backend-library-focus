@@ -1,10 +1,36 @@
+import { Op } from 'sequelize';
 import BadRequestException from '../../handlers/BadRequestException';
 import { Books, BooksRecords, Users } from '../models/index';
-import { BookServicesInterface } from './interfaces/BookServicesInterfaces';
+import { BookServicesInterface, RequestQuery } from './interfaces/BookServicesInterfaces';
 
 export default class BookServices implements BookServicesInterface {
-  public async index(): Promise<object> {
-    const getAllBooks = await Books.findAll();
+  public async index(queryFilters: RequestQuery): Promise<object> {
+    const {
+      isbn, title, genre, author,
+    } = queryFilters;
+    const filters: {
+      isbn?: object;
+      title?: object;
+      genre?: object;
+      author?: object;
+    } = {};
+
+    if (isbn) filters.isbn = { [Op.like]: `%${isbn}%` };
+    if (title) {
+      filters.title = {
+        [Op.like]: `%${title.toUpperCase()}%`,
+      };
+    }
+    if (author) {
+      filters.author = { [Op.like]: `%${author.toUpperCase()}%` };
+    }
+    if (genre) {
+      filters.genre = { [Op.like]: `%${genre.toUpperCase()}%` };
+    }
+
+    const getAllBooks = await Books.findAll({
+      where: { ...filters },
+    });
 
     return getAllBooks;
   }
