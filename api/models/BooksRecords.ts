@@ -21,7 +21,7 @@ BooksRecords.init(
       autoIncrement: true,
     },
     id_user: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       unique: true,
       references: {
         model: 'id_user',

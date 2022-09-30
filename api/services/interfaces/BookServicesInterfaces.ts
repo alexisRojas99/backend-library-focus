@@ -15,4 +15,5 @@ export interface BookServicesInterface {
   // index(index: RequestQuery): Promise<object>;
   index(): Promise<object>;
   getBookById(id: string): Promise<object>;
+  getHistory(): Promise<object>;
 }

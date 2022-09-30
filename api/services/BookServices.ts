@@ -1,5 +1,5 @@
 import BadRequestException from '../../handlers/BadRequestException';
-import { Books } from '../models/index';
+import { Books, BooksRecords, Users } from '../models/index';
 import { BookServicesInterface } from './interfaces/BookServicesInterfaces';
 
 export default class BookServices implements BookServicesInterface {
@@ -16,5 +16,22 @@ export default class BookServices implements BookServicesInterface {
     if (!getBookById) throw new BadRequestException('Book not found');
 
     return getBookById || {};
+  }
+
+  public async getHistory(): Promise<object> {
+    const getHistory = await BooksRecords.findAll({
+      order: [['movement_date', 'DESC']],
+      include: [
+        {
+          model: Users,
+          attributes: ['firstname', 'lastname', 'username'],
+        },
+        {
+          model: Books,
+        },
+      ],
+    });
+
+    return getHistory || {};
   }
 }

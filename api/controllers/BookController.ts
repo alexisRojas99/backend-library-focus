@@ -22,4 +22,10 @@ export default class BookController {
 
     return res.status(HttpCode.HTTP_OK).json(response);
   }
+
+  public async getHistory(req: Request, res: Response): Promise<object> {
+    const response = await this.bookServices.getHistory();
+
+    return res.status(HttpCode.HTTP_OK).json(response);
+  }
 }

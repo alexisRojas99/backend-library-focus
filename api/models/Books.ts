@@ -44,11 +44,8 @@ Books.init(
 
   {
     timestamps: false,
-
     sequelize: DB.connection(),
-
     tableName: 'books',
-
     schema: 'public',
   },
 );

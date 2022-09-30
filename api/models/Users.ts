@@ -25,6 +25,14 @@ Users.init(
       unique: true,
       allowNull: false,
     },
+    firstname: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+    },
+    lastname: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+    },
     password: {
       type: DataTypes.TEXT,
       allowNull: false,
