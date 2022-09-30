@@ -29,4 +29,20 @@ export default class UserController {
 
     return res.status(HttpCode.HTTP_OK).json(response);
   }
+
+  public async createUser(req: Request, res: Response) {
+    const {
+      firstname, lastname, username, id_role: idRole, password,
+    } = req.body;
+
+    const response = await this.userServices.createUser({
+      firstname,
+      lastname,
+      username,
+      id_role: idRole,
+      password,
+    });
+
+    return res.status(HttpCode.HTTP_CREATED).json(response);
+  }
 }
