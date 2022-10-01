@@ -3,7 +3,6 @@ import express, { Application } from 'express';
 import { createServer, Server as ServerHTTP } from 'http';
 import cors from 'cors';
 import router from '../../routes/api';
-import openapi from '../../routes/openapi';
 import Handler from '../../handlers/Handler';
 
 class Server {
@@ -41,7 +40,11 @@ class Server {
     this.app.use(express.static('public'));
 
     // OpenAPI Documentation
-    if (process.env.APP_ENV === 'development') this.app.use('/', openapi);
+    if (process.env.APP_ENV === 'development') {
+      import('../../routes/openapi').then((openapi: any) => {
+        this.app.use('/', openapi);
+      });
+    }
   }
 
   routes() {
