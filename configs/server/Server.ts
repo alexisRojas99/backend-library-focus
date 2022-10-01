@@ -14,7 +14,7 @@ class Server {
 
   constructor() {
     this.app = express();
-    this.port = process.env.API_PORT || '8000';
+    this.port = process.env.API_PORT || process.env.PORT || '8000';
     this.server = createServer(this.app);
     this.host = process.env.API_HOST || 'localhost';
     this.path = '/api';
