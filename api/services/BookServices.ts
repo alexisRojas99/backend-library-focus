@@ -101,6 +101,7 @@ export default class BookServices implements BookServicesInterface {
     const dataUpdate = {
       quantity: checkBook ? checkBook.quantity + 1 : book.quantity,
       movement_type: 'EGRESS',
+      movement_date: new Date(),
     };
 
     // Validate stock of book
