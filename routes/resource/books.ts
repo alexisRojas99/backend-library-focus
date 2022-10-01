@@ -11,7 +11,8 @@ const router = Router();
 const bookController = new BookController(new BookServices());
 
 router.get('/', [], Call(bookController.index.bind(bookController)));
-router.get('/history', [validateRole('ROLE_SUPER_ADMIN')], Call(bookController.getHistory.bind(bookController)));
+router.get('/history', [], Call(bookController.getHistory.bind(bookController)));
+router.post('/history', [], Call(bookController.createHistoryBook.bind(bookController)));
 router.get('/:id', [], Call(bookController.getBookById.bind(bookController)));
 router.post('/', [validate(createNewBookSchema)], Call(bookController.createBook.bind(bookController)));
 

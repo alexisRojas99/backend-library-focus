@@ -21,10 +21,17 @@ export interface RequestQueryCreateBook {
   stock: number;
 }
 
+export interface RequestQueryCreateHistoryBook {
+  id_user: number;
+  isbn: string;
+  quantity: number;
+  movement_type: string;
+}
+
 export interface BookServicesInterface {
-  // index(index: RequestQuery): Promise<object>;
   index(queryFilters: RequestQuery): Promise<object>;
   getBookById(id: string): Promise<object>;
   getHistory(): Promise<object>;
   createBook(book: RequestQueryCreateBook): Promise<object>;
+  createHistoryBook(book: RequestQueryCreateHistoryBook): Promise<object>;
 }

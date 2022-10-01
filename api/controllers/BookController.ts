@@ -42,7 +42,25 @@ export default class BookController {
     } = req.body;
 
     const response = await this.bookServices.createBook({
-      isbn, title, image, author, published_year: publishedYear, genre, stock,
+      isbn,
+      title,
+      image,
+      author,
+      published_year: publishedYear,
+      genre,
+      stock,
+    });
+
+    return res.status(HttpCode.HTTP_CREATED).json(response);
+  }
+
+  public async createHistoryBook(req: Request, res: Response): Promise<object> {
+    const {
+      id_user: idUser, isbn, quantity, movement_type: movementType,
+    } = req.body;
+
+    const response = await this.bookServices.createHistoryBook({
+      id_user: idUser, isbn, quantity, movement_type: movementType,
     });
 
     return res.status(HttpCode.HTTP_CREATED).json(response);
