@@ -34,9 +34,8 @@ Books.init(
     },
 
     stock: {
-      type: DataTypes.STRING,
+      type: DataTypes.BIGINT,
     },
-
     image: {
       type: DataTypes.STRING,
     },

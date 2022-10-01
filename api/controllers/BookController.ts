@@ -65,4 +65,12 @@ export default class BookController {
 
     return res.status(HttpCode.HTTP_CREATED).json(response);
   }
+
+  public async returnBook(req: Request, res: Response): Promise<object> {
+    const { id } = req.body;
+
+    const response = await this.bookServices.returnBook({ id });
+
+    return res.status(HttpCode.HTTP_OK).json(response);
+  }
 }

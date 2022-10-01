@@ -4,7 +4,11 @@ import RequestException from '../../handlers/RequestException';
 import DB from '../database/sequelize/DB';
 import { Books, BooksRecords, Users } from '../models/index';
 import {
-  BookServicesInterface, RequestQuery, RequestQueryCreateBook, RequestQueryCreateHistoryBook,
+  BookServicesInterface,
+  RequestQuery,
+  RequestQueryCreateBook,
+  RequestQueryCreateHistoryBook,
+  RequestQueryReturnBook,
 } from './interfaces/BookServicesInterfaces';
 
 export default class BookServices implements BookServicesInterface {
@@ -33,6 +37,7 @@ export default class BookServices implements BookServicesInterface {
     }
 
     const getAllBooks = await Books.findAll({
+      order: [['title', 'DESC']],
       where: { ...filters },
     });
 
@@ -54,7 +59,7 @@ export default class BookServices implements BookServicesInterface {
       include: [
         {
           model: Users,
-          attributes: ['firstname', 'lastname', 'username'],
+          attributes: ['id', 'firstname', 'lastname', 'username'],
         },
         {
           model: Books,
@@ -95,7 +100,7 @@ export default class BookServices implements BookServicesInterface {
 
     const dataUpdate = {
       quantity: checkBook ? checkBook.quantity + 1 : book.quantity,
-      movement_type: 'ENTRY',
+      movement_type: 'EGRESS',
     };
 
     // Validate stock of book
@@ -130,7 +135,7 @@ export default class BookServices implements BookServicesInterface {
         isbn: book.isbn,
         id_user: book.id_user,
         quantity: 1,
-        movement_type: 'ENTRY',
+        movement_type: 'EGRESS',
       };
 
       const createHistory = await BooksRecords.create(data, { transaction: t });
@@ -145,6 +150,40 @@ export default class BookServices implements BookServicesInterface {
 
       await t.commit();
       return createHistory || {};
+    } catch (err) {
+      console.log(err);
+
+      await t.rollback();
+      throw new RequestException();
+    }
+  }
+
+  public async returnBook(bookRecord: RequestQueryReturnBook): Promise<object> {
+    const t = await DB.connection().transaction();
+
+    const checkQuantity = (await BooksRecords.findByPk(bookRecord.id)) as any;
+    const existBook = (await Books.findByPk(checkQuantity.isbn)) as any;
+
+    if (!existBook) throw new BadRequestException('Book not found');
+    if (checkQuantity.quantity === 0) throw new BadRequestException('You must reserve a book');
+
+    const data = {
+      quantity: checkQuantity.quantity - 1,
+      movement_type: 'ENTRY',
+      movement_date: new Date(),
+    };
+
+    try {
+      await BooksRecords.update(data, {
+        where: { id: checkQuantity.id },
+      });
+
+      await Books.update({ stock: Number(existBook.stock) + 1 }, { where: { isbn: existBook.isbn } });
+
+      await t.commit();
+      return {
+        message: 'Book returned successfully',
+      };
     } catch (err) {
       console.log(err);
 
