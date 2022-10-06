@@ -32,10 +32,17 @@ export interface RequestQueryReturnBook {
   id: number;
 }
 
+export interface RequestQueryGetHistory {
+  id: number;
+  username: string;
+  is_suspended: boolean;
+  roles: Array<any>;
+}
+
 export interface BookServicesInterface {
   index(queryFilters: RequestQuery): Promise<object>;
   getBookById(id: string): Promise<object>;
-  getHistory(): Promise<object>;
+  getHistory(idUser: RequestQueryGetHistory): Promise<object>;
   createBook(book: RequestQueryCreateBook): Promise<object>;
   createHistoryBook(book: RequestQueryCreateHistoryBook): Promise<object>;
   returnBook(bookRecord: RequestQueryReturnBook): Promise<object>;

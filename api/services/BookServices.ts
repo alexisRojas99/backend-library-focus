@@ -8,6 +8,7 @@ import {
   RequestQuery,
   RequestQueryCreateBook,
   RequestQueryCreateHistoryBook,
+  RequestQueryGetHistory,
   RequestQueryReturnBook,
 } from './interfaces/BookServicesInterfaces';
 
@@ -53,9 +54,16 @@ export default class BookServices implements BookServicesInterface {
     return getBookById || {};
   }
 
-  public async getHistory(): Promise<object> {
+  public async getHistory(objUser: RequestQueryGetHistory): Promise<object> {
+    const filters: any = {};
+
+    if (objUser.roles[0] !== 'ROLE_LIBRARIAN') filters.id_user = objUser.id;
+
+    if (objUser.roles[0] === 'ROLE_STUDENT' && Object.keys(objUser).length === 0) return [];
+
     const getHistory = await BooksRecords.findAll({
       order: [['movement_date', 'DESC']],
+      where: { ...filters },
       include: [
         {
           model: Users,

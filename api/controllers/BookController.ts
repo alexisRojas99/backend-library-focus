@@ -1,7 +1,12 @@
 import { Request, Response } from 'express';
 import { HttpCode } from '../../configs/HttpCode';
 import {
-  BookServicesInterface, RequestBody, RequestParams, RequestQuery, ResponseBody,
+  BookServicesInterface,
+  RequestBody,
+  RequestParams,
+  RequestQuery,
+  RequestQueryGetHistory,
+  ResponseBody,
 } from '../services/interfaces/BookServicesInterfaces';
 
 export default class BookController {
@@ -30,8 +35,8 @@ export default class BookController {
     return res.status(HttpCode.HTTP_OK).json(response);
   }
 
-  public async getHistory(req: Request, res: Response): Promise<object> {
-    const response = await this.bookServices.getHistory();
+  public async getHistory(req: Request<RequestParams, ResponseBody, RequestBody, RequestQueryGetHistory> | any, res: Response): Promise<object> {
+    const response = await this.bookServices.getHistory(req?.user);
 
     return res.status(HttpCode.HTTP_OK).json(response);
   }
@@ -60,7 +65,10 @@ export default class BookController {
     } = req.body;
 
     const response = await this.bookServices.createHistoryBook({
-      id_user: idUser, isbn, quantity, movement_type: movementType,
+      id_user: idUser,
+      isbn,
+      quantity,
+      movement_type: movementType,
     });
 
     return res.status(HttpCode.HTTP_CREATED).json(response);
